@@ -22,10 +22,24 @@ start-mage(){
 stream-data(){
     docker-compose -f docker/streaming/docker-compose.yml up 
 }
+
+#Git stage,commit and push
 gitting(){
     git add .
     git commit -m "Update from local"
     sleep 2
     git push -u origin main
+}
+
+
+#Terraform actions
+terraform-start(){
+    terraform -chdir=terraform init
+    terraform -chdir=terraform plan
+    terraform -chdir=terraform apply
+}
+
+terraform-destroy(){
+    terraform -chdir=terraform destroy
 }
 
