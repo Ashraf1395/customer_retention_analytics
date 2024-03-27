@@ -1,2 +1,1 @@
-{"operation": "create", "resource": {"type": "pipeline", "uuid": "streaming_pipeline"}, "timestamp": 1711522705, "user": null}
-{"operation": "create", "resource": {"type": "pipeline", "uuid": "batch_pipeline"}, "timestamp": 1711525732, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "batch_pipeline"}, "timestamp": 1711537790, "user": null}

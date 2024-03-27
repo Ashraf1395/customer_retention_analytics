@@ -1,0 +1,1 @@
+"{\"data\":[\"Check the given spark_config against the active Spark session.\",\"Create a new Spark session.\",\"\"],\"error\":null,\"execution_state\":null,\"metadata\":null,\"msg_id\":\"63191231-41a7c460d97f61c34e52348e_1_1\",\"msg_type\":\"stream\",\"type\":\"text/plain\",\"block_type\":\"scratchpad\",\"pipeline_uuid\":null,\"uuid\":\"spark_session\"}"

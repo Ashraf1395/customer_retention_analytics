@@ -15,6 +15,7 @@ start-kafka(){
 
 # Start Mage Containers
 start-mage(){
+    docker build -t mage_spark docker/mage
     docker-compose -f docker/mage/docker-compose.yml up -d
 }
 
