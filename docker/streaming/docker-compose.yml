@@ -8,7 +8,7 @@ services:
       build:
         context: ../../streaming_pipeline
       container_name: stream
-      command: python producer.py
+      command: python source_to_kafka/producer.py
       working_dir: /home/streaming_pipeline
       volumes:
         - ./streaming_pipeline:/home/stream_pipeline
