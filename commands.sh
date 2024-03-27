@@ -23,6 +23,14 @@ stream-data(){
     docker-compose -f docker/streaming/docker-compose.yml up 
 }
 
+
+start-spark(){
+    chmod +x ./docker/spark/build.sh
+    ./docker/spark/build.sh
+
+    docker-compose -f docker/spark/docker-compose.yml up -d
+}
+
 #Git stage,commit and push
 gitting(){
     git add .

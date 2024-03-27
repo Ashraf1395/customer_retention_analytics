@@ -3,7 +3,7 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - transform_raw_data
+  - kafka_to_gcs
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -22,15 +22,15 @@ blocks:
   executor_config: null
   executor_type: local_python
   has_callback: false
-  language: python
-  name: transform_raw_data
+  language: yaml
+  name: kafka_to_gcs
   retry_config: null
-  status: not_executed
+  status: updated
   timeout: null
-  type: transformer
+  type: data_exporter
   upstream_blocks:
   - consume_from_kafka
-  uuid: transform_raw_data
+  uuid: kafka_to_gcs
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
