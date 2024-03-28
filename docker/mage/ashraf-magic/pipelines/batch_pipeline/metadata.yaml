@@ -2,34 +2,23 @@ blocks:
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
-  downstream_blocks: []
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: spark session
-  retry_config: null
-  status: updated
-  timeout: null
-  type: scratchpad
-  upstream_blocks: []
-  uuid: spark_session
-- all_upstream_blocks_executed: true
-  color: null
-  configuration: {}
   downstream_blocks:
-  - transform
+  - gcs_to_bigquery_dim_time
+  - gcs_to_bigquery_dim_customer
+  - gcs_to_bigquery_dim_location
+  - gcs_to_bigquery_dim_delivery_person
+  - export_to_bigquery_fact_order
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
-  name: gcs_to_spark
+  name: gcs_loader
   retry_config: null
   status: executed
   timeout: null
   type: data_loader
   upstream_blocks: []
-  uuid: gcs_to_spark
+  uuid: gcs_loader
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
@@ -38,19 +27,83 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: transform
+  name: export_to_bigquery_fact_order
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
-  type: transformer
+  type: data_exporter
   upstream_blocks:
-  - gcs_to_spark
-  uuid: transform
+  - gcs_loader
+  uuid: export_to_bigquery_fact_order
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_delivery_person
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_delivery_person
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_location
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_location
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_customer
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_customer
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_time
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_time
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
 conditionals: []
-created_at: '2024-03-27 11:09:50.171377+00:00'
+created_at: '2024-03-28 14:58:23.122970+00:00'
 data_integration: null
 description: null
 executor_config: {}
@@ -66,7 +119,7 @@ settings:
   triggers: null
 spark_config: {}
 tags: []
-type: pyspark
+type: python
 uuid: batch_pipeline
 variables_dir: /home/src/mage_data/ashraf-magic
 widgets: []

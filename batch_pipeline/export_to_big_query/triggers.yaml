@@ -1,25 +1,12 @@
 triggers:
 - envs: []
-  last_enabled_at: 2024-03-15 07:28:32.464849
-  name: trigger_export_to_big_query
-  pipeline_uuid: export_to_big_query
+  last_enabled_at: 2024-03-28 16:19:55.483035
+  name: gcs_to_bigquery_trigger
+  pipeline_uuid: batch_pipeline
   schedule_interval: null
   schedule_type: api
   settings: null
   sla: null
-  start_time: 2024-03-15 06:43:00
+  start_time: 2024-03-28 16:19:00
   status: active
-  variables:
-    dim_customer: customer_dimension
-- envs: []
-  last_enabled_at: 2024-03-15 06:45:34.914093
-  name: trigger_export_to_bigquery
-  pipeline_uuid: export_to_big_query
-  schedule_interval: null
-  schedule_type: api
-  settings: null
-  sla: null
-  start_time: 2024-03-15 06:43:00
-  status: inactive
-  variables:
-    dim_customer: customer_dimension
+  variables: {}
