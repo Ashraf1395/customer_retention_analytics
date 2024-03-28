@@ -2,7 +2,7 @@ import pyspark
 from pyspark.sql import SparkSession
 from pyspark.conf import SparkConf
 from pyspark.context import SparkContext
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col,monotonically_increasing_id,rand
 from config import credentials_path, jar_file_path, gcs_bucket_path, output_path
 from utils import customer_columns, product_columns, location_columns, order_columns, shipping_columns, department_columns, metadata_columns
 
@@ -31,79 +31,89 @@ spark = SparkSession.builder \
     .config(conf=sc.getConf()) \
     .getOrCreate()
 
-# Load data from GCS bucket
-print(f'Loading Data from GCS Bucket path {gcs_bucket_path}')
-df_raw = spark.read.parquet(gcs_bucket_path + 'raw_streaming/*')
-print('Done')
+customer_data=spark.read.options(header=True).csv("streaming_pipeline/data/onlinedeliverydata.csv")
 
-# Function to extract specific columns from DataFrame
-def extract_columns(df, columns_to_extract):
-    extracted_cols = [col("data").getItem(col_name).alias(col_name) for col_name in columns_to_extract]
-    return df.select(*extracted_cols)
+customer_data = customer_data.dropDuplicates().withColumn('customer_id',monotonically_increasing_id())
+customer_data.printSchema()
 
-# Function to create dimension tables
-def create_dimension_tables(df, extract_func, columns_to_extract, table_name):
-    dimension_df = extract_func(df, columns_to_extract)
-    # Uncomment the line below if you want to create a temporary view for SQL queries
-    # dimension_df.createOrReplaceTempView(table_name)
-    return dimension_df
+order_data = spark.read.options(header=True).csv('streaming_pipeline/data/train.csv')
+order_data = order_data.withColumn('customer_id', (rand()*287 +1).cast('int'))
+order_data.printSchema()
 
-# Create dimension tables
-customer_dimension = create_dimension_tables(df_raw, extract_columns, customer_columns, "customer_dimension")
-# customer_dimension.show()
-print('Created Dimension table for Customers')
 
-product_dimension = create_dimension_tables(df_raw, extract_columns, product_columns, "product_dimension")
-# product_dimension.show()
-print('Created Dimension table for Products')
+# # Load data from GCS bucket
+# print(f'Loading Data from GCS Bucket path {gcs_bucket_path}')
+# df_raw = spark.read.parquet(gcs_bucket_path + 'raw_streaming/*')
+# print('Done')
 
-location_dimension = create_dimension_tables(df_raw, extract_columns, location_columns, "location_dimension")
-# location_dimension.show()
-print('Created Dimension table for Location')
+# # Function to extract specific columns from DataFrame
+# def extract_columns(df, columns_to_extract):
+#     extracted_cols = [col("data").getItem(col_name).alias(col_name) for col_name in columns_to_extract]
+#     return df.select(*extracted_cols)
 
-order_dimension = create_dimension_tables(df_raw, extract_columns, order_columns, "order_dimension").\
-                    withColumnRenamed('Order date (DateOrders)','Order date')
-# order_dimension.show()
-print('Created Dimension table for Orders')
+# # Function to create dimension tables
+# def create_dimension_tables(df, extract_func, columns_to_extract, table_name):
+#     dimension_df = extract_func(df, columns_to_extract)
+#     # Uncomment the line below if you want to create a temporary view for SQL queries
+#     # dimension_df.createOrReplaceTempView(table_name)
+#     return dimension_df
 
-shipping_dimension = create_dimension_tables(df_raw, extract_columns, shipping_columns, "shipping_dimension").\
-                        withColumnRenamed('Shipping date (DateOrders)','Shipping date').\
-                        withColumnRenamed('Days for shipping (real)','Days for shipping real').\
-                        withColumnRenamed('Days for shipment (scheduled)','Days for shipping scheduled')                     
-shipping_dimension.show()
-print('Created Dimension table for Shipping')
+# # Create dimension tables
+# customer_dimension = create_dimension_tables(df_raw, extract_columns, customer_columns, "customer_dimension")
+# # customer_dimension.show()
+# print('Created Dimension table for Customers')
 
-department_dimension = create_dimension_tables(df_raw, extract_columns, department_columns, "department_dimension")
-# department_dimension.show()
-print('Created Dimension table for Departments')
+# product_dimension = create_dimension_tables(df_raw, extract_columns, product_columns, "product_dimension")
+# # product_dimension.show()
+# print('Created Dimension table for Products')
 
-# Function to extract metadata columns
-def extract_metadata(df, columns_to_extract):
-    extracted_cols = [col("metadata").getItem(col_name).alias(col_name) for col_name in columns_to_extract]
-    return df.select(*extracted_cols)
+# location_dimension = create_dimension_tables(df_raw, extract_columns, location_columns, "location_dimension")
+# # location_dimension.show()
+# print('Created Dimension table for Location')
 
-# Create metadata dimension table
-metadata_dimension = create_dimension_tables(df_raw, extract_metadata, metadata_columns, "metadata_dimension")
-# metadata_dimension.show()
-print('Created Dimension table for Metadata')
+# order_dimension = create_dimension_tables(df_raw, extract_columns, order_columns, "order_dimension").\
+#                     withColumnRenamed('Order date (DateOrders)','Order date')
+# # order_dimension.show()
+# print('Created Dimension table for Orders')
 
-# Dictionary to hold all dimension tables
-dataframes = {
-    "customer_dimension": customer_dimension,
-    "product_dimension": product_dimension,
-    "location_dimension": location_dimension,
-    "order_dimension": order_dimension,
-    "shipping_dimension": shipping_dimension,
-    "department_dimension": department_dimension,
-    "metadata_dimension": metadata_dimension
-}
+# shipping_dimension = create_dimension_tables(df_raw, extract_columns, shipping_columns, "shipping_dimension").\
+#                         withColumnRenamed('Shipping date (DateOrders)','Shipping date').\
+#                         withColumnRenamed('Days for shipping (real)','Days for shipping real').\
+#                         withColumnRenamed('Days for shipment (scheduled)','Days for shipping scheduled')                     
+# shipping_dimension.show()
+# print('Created Dimension table for Shipping')
 
-# Function to write dimension tables to GCS
-def write_to_gcs(dataframes, output_path):
-    print('Starting to Export Raw Streaming data to GCS...')
-    for name, dataframe in dataframes.items():
-        dataframe.write.mode("overwrite").option("header", "true").option("compression", "none").parquet(output_path + name + ".parquet")
-        print(f"Exported Dataframe {name} to GCS.")
+# department_dimension = create_dimension_tables(df_raw, extract_columns, department_columns, "department_dimension")
+# # department_dimension.show()
+# print('Created Dimension table for Departments')
 
-# Write dimension tables to GCS
-write_to_gcs(dataframes, output_path)
+# # Function to extract metadata columns
+# def extract_metadata(df, columns_to_extract):
+#     extracted_cols = [col("metadata").getItem(col_name).alias(col_name) for col_name in columns_to_extract]
+#     return df.select(*extracted_cols)
+
+# # Create metadata dimension table
+# metadata_dimension = create_dimension_tables(df_raw, extract_metadata, metadata_columns, "metadata_dimension")
+# # metadata_dimension.show()
+# print('Created Dimension table for Metadata')
+
+# # Dictionary to hold all dimension tables
+# dataframes = {
+#     "customer_dimension": customer_dimension,
+#     "product_dimension": product_dimension,
+#     "location_dimension": location_dimension,
+#     "order_dimension": order_dimension,
+#     "shipping_dimension": shipping_dimension,
+#     "department_dimension": department_dimension,
+#     "metadata_dimension": metadata_dimension
+# }
+
+# # Function to write dimension tables to GCS
+# def write_to_gcs(dataframes, output_path):
+#     print('Starting to Export Raw Streaming data to GCS...')
+#     for name, dataframe in dataframes.items():
+#         dataframe.write.mode("overwrite").option("header", "true").option("compression", "none").parquet(output_path + name + ".parquet")
+#         print(f"Exported Dataframe {name} to GCS.")
+
+# # Write dimension tables to GCS
+# write_to_gcs(dataframes, output_path)
