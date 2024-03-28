@@ -3,7 +3,11 @@ blocks:
   color: null
   configuration: {}
   downstream_blocks:
-  - gcs_to_bigquery
+  - gcs_to_bigquery_dim_time
+  - gcs_to_bigquery_dim_customer
+  - gcs_to_bigquery_dim_location
+  - gcs_to_bigquery_dim_delivery_person
+  - export_to_bigquery_fact_order
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -23,14 +27,78 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: gcs_to_bigquery
+  name: export_to_bigquery_fact_order
   retry_config: null
   status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
   - gcs_loader
-  uuid: gcs_to_bigquery
+  uuid: export_to_bigquery_fact_order
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_delivery_person
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_delivery_person
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_location
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_location
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_customer
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_customer
+- all_upstream_blocks_executed: true
+  color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: python
+  name: gcs_to_bigquery_dim_time
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - gcs_loader
+  uuid: gcs_to_bigquery_dim_time
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}

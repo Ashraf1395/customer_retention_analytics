@@ -51,4 +51,20 @@ terraform-start(){
 terraform-destroy(){
     terraform -chdir=terraform destroy
 }
+gcs-to-bigquery-pipeline(){
+    curl -X POST https://zany-space-xylophone-5g5p74jwr9j37664-6789.app.github.dev/api/pipeline_schedules/1/pipeline_runs/0dac6dcd9ada49f1a1ba6866424aaebe \
+    --header 'Content-Type: application/json' \
+    --data '
+    {
+    "pipeline_run": {
+        "variables": {
+        "key1": "value1",
+        "key2": "value2"
+        }
+    }
+    }'
+}
 
+olap-transformation-pipeline(){
+    python batch_pipeline/export_to_gcs/pipeline.py
+}

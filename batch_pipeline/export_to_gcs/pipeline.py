@@ -56,8 +56,15 @@ order_data = order_data.withColumn('customer_id',(rand()*287+1).cast('int'))
 
 customer_data=spark.read.options(header=True).csv("streaming_pipeline/data/onlinedeliverydata.csv")
 
-customer_data = customer_data.dropDuplicates().withColumn('customer_id',monotonically_increasing_id()+1)
-# customer_data.printSchema()
+customer_data = customer_data.dropDuplicates().\
+                                withColumn('customer_id',monotonically_increasing_id()+1).\
+                                withColumnRenamed('Medium (P1)','Medium_P1').\
+                                withColumnRenamed('Medium (P2)','Medium_P2').\
+                                withColumnRenamed('Meal(P1)','Meal_P1').\
+                                withColumnRenamed('Meal(P2)','Meal_P2').\
+                                withColumnRenamed('Perference(P1)','Perference_P1').\
+                                withColumnRenamed('Perference(P2)','Perference_P2')
+customer_data.printSchema()
 
 # order_data = spark.read.options(header=True).csv('streaming_pipeline/data/train.csv')
 # order_data = order_data.withColumn('customer_id', (rand()*287 +1).cast('int'))

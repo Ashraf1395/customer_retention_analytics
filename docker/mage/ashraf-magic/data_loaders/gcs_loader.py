@@ -41,7 +41,6 @@ file_names = list_files_in_gcs_bucket(bucket_name, gcs)
 
 olap_tables=['customer_dimension','delivery_person_dimension','location_dimension','time_dimension','fact_order']
 # Filter file names for customer dimension
-customer_dimension = [file_name for file_name in file_names if file_name.startswith('transformed_data/customer_dimension/part-')]
 
 def filter_file_names(olap_tables, file_names):
     filtered_names = {}
@@ -65,11 +64,11 @@ def load_from_google_cloud_storage(*args, **kwargs):
     olap_dfs={}
     # Iterate over file paths in customer dimension
     for table_name,file_paths in filtered_file_names.items():
-        print('Table_name:',table_name,'File_Paths:',file_paths)
+
         # Define object key
         dfs = []
         for file_path in file_paths:
-            print('File_path:',file_path)
+
             object_key = file_path
 
             # Load DataFrame from Google Cloud Storage
@@ -80,8 +79,9 @@ def load_from_google_cloud_storage(*args, **kwargs):
     
         # Concatenate DataFrames
         concatenated_df = pd.concat(dfs, ignore_index=True)
+
         olap_dfs[table_name]=concatenated_df
-    print(concatenated_df)
+
     return olap_dfs
 
 
