@@ -34,13 +34,13 @@ config = ConfigFileLoader('./ashraf-magic/io_config.yaml', 'default')
 gcs = config[ConfigKey.GOOGLE_SERVICE_ACC_KEY_FILEPATH]
 
 # Define bucket name
-bucket_name = 'supply-chain-data-terraform'
+bucket_name = 'customer-activity-data-terraform'
 
 # List all file names in the bucket
 file_names = list_files_in_gcs_bucket(bucket_name, gcs)
 
 # Filter file names for customer dimension
-customer_dimension = [file_name for file_name in file_names if file_name.startswith('transformed_data/location_dimension.parquet/part-')]
+customer_dimension = [file_name for file_name in file_names if file_name.startswith('transformed_data/location_dimension/part-')]
 
 @data_loader
 def load_from_google_cloud_storage(*args, **kwargs):

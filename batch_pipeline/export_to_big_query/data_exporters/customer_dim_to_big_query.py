@@ -16,7 +16,7 @@ def export_data_to_big_query(df: DataFrame, **kwargs) -> None:
 
     Docs: https://docs.mage.ai/design/data-loading#bigquery
     """
-    table_id = 'gothic-sylph-387906.supply_chain_data.dim_customer'
+    table_id = 'gothic-sylph-387906.customer_activity_data.dim_customer'
     config_path = path.join(get_repo_path(), 'io_config.yaml')
     config_profile = 'default'
 
