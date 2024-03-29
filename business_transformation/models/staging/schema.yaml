@@ -7,6 +7,6 @@ sources:
     tables:
       - name: dim_customer
       - name: fact_order
-      - name: dim_loaction
+      - name: dim_location
       - name: dim_time
       - name: dim_delvivery_person
