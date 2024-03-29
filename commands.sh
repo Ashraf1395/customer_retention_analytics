@@ -17,6 +17,23 @@ start-kafka(){
 start-mage(){
     docker build -t mage_spark docker/mage
     docker-compose -f docker/mage/docker-compose.yml up -d
+
+    sudo cp batch_pipeline/export_to_bigquery/data_exporters/* docker/mage/${PROJECT_NAME}/data_exporters/
+    sudo cp batch_pipeline/export_to_bigquery/data_loaders/* docker/mage/${PROJECT_NAME}/data_loaders/
+
+    sudo mkdir docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline
+    sudo touch docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline/__init__.py
+    sudo cp batch_pipeline/export_to_bigquery/*.yaml docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline/
+
+    sudo cp streaming_pipeline/kafka_to_gcs_streaming/consumer_from_kafka.yaml docker/mage/${PROJECT_NAME}/data_loaders/
+    sudo cp streaming_pipeline/kafka_to_gcs_streaming/kafka_to_gcs docker/mage/${PROJECT_NAME}/data_exporters/
+
+    sudo mkdir docker/mage/${PROJECT_NAME}/pipelines/streaming_pipeline
+    sudo touch docker/mage/${PROJECT_NAME}/pipelines/streaming_pipeline/__init__.py
+    sudo cp streaming_pipeline/kafka_to_gcs_streaming/metadata.yaml docker/mage/${PROJECT_NAME}/pipelines/streaming_pipeline/
+    
+    
+    
 }
 
 #Start producing stream data
