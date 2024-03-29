@@ -9,4 +9,4 @@ sources:
       - name: fact_order
       - name: dim_location
       - name: dim_time
-      - name: dim_delvivery_person
+      - name: dim_delivery_person
