@@ -4,6 +4,7 @@
 
 select
     -- identifiers
+    {{ dbt.safe_cast("customer_id", api.Column.translate_type("integer")) }} as customer_id,
     {{ dbt.safe_cast("Age", api.Column.translate_type("string")) }} as age,
     {{ dbt.safe_cast("Gender", api.Column.translate_type("string")) }} as gender,
     {{ dbt.safe_cast("Marital_Status", api.Column.translate_type("string")) }} as marital_status,
