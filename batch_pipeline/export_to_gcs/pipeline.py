@@ -97,7 +97,8 @@ dim_time = order_data.select('Order_Date',col('Time_Orderd').alias('Time_Ordered
 
 fact_order = order_data.withColumn("Time_taken", regexp_extract("Time_taken(min)", r"(\d+)", 1))\
                         .select(col('ID').alias('order_id'),'customer_id','Delivery_person_ID','Order_Date',col('Time_taken(min)').alias('Time_taken'),'multiple_deliveries',
-                                    'Type_of_order')
+                                    'Type_of_order').\
+                        withColumn('order_amount',(rand()*1000+1).cast('int'))
 # fact_order.show()
 
 
