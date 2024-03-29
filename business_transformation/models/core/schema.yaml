@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: daily_customer_churn_rate
+  - name: customer_churn_rate
     description: "Model to calculate the daily customer churn rate"
     materialized: table
     columns:
@@ -54,8 +54,8 @@ models:
       - name: Purchase_Frequency_Weekly
         description: "Weekly purchase frequency calculated as the ratio of total orders to total weeks active"
         tests: []
-        
-  - name: weekly_repeat_purchase_rate
+
+  - name: weekly_repeat_purchase
     description: "Model to calculate the weekly repeat purchase rate"
     materialized: table
     columns:
