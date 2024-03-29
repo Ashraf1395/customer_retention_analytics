@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: staging
+    database: gothic-sylph-387906
+    schema: customer_retention_data
+    tables:
+      - name: dim_customer
+      - name: fact_order
