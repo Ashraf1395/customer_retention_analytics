@@ -36,7 +36,7 @@ The Mage Pipeline is responsible for exporting transformed (Silver level) data f
 ### Pipeline Execution
 To execute the Mage Pipeline, run the commands `start-mage` and then `gcs-to-bigquery-pipeline`. This command triggers an API request to Mage, instructing it to initiate the pipeline execution.
 
-![Tree_diagram](../images/gcs_to_bigquery_lineage.png)
+![Tree_diagram](../images/batch_pipeline_tree.png)
 
 ### API Credentials
 Ensure that the API credentials for accessing Mage are correctly configured in the source file. This step is essential for seamless integration and secure data transfer between GCS and BigQuery.
