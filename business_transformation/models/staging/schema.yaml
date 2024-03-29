@@ -5,10 +5,105 @@ sources:
     database: gothic-sylph-387906
     schema: customer_activity_dat
     tables:
-      - name: dim_customer
-      - name: fact_order
-      - name: dim_location
-      - name: dim_time
-      - name: dim_delivery_person
+    - name: dim_customer
+      columns:
+        - name: age
+          tests:
+            - not_null
+        - name: gender
+          tests:
+            - not_null
+        - name: marital_status
+        - name: occupation
+        - name: monthly_income
+        - name: educational_qualifications
+        - name: family_size
+        - name: latitude
+        - name: longitude
+        - name: pin_code
+        - name: medium_p1
+        - name: medium_p2
+        - name: meal_p1
+        - name: meal_p2
+        - name: perference_p1
+        - name: perference_p2
+        - name: ease_and_convenient
+        - name: time_saving
+        - name: more_restaurant_choices
+        - name: easy_payment_option
+        - name: more_offers_and_discount
+        - name: good_food_quality
+        - name: good_tracking_system
+        - name: self_cooking
+        - name: health_concern
+        - name: late_delivery
+        - name: poor_hygiene
+        - name: bad_past_experience
+        - name: unavailability
+        - name: unaffordable
+        - name: long_delivery_time
+        - name: delay_of_delivery_person_getting_assigned
+        - name: delay_of_delivery_person_picking_up_food
+        - name: wrong_order_delivered
+        - name: missing_item
+        - name: order_placed_by_mistake
+        - name: influence_of_time
+        - name: order_time
+        - name: maximum_wait_time
+        - name: residence_in_busy_location
+        - name: google_maps_accuracy
+        - name: good_road_condition
+        - name: low_quantity_low_time
 
+    - name: dim_delivery_person
+      columns:
+        - name: delivery_person_id
+          tests:
+            - not_null
+        - name: delivery_person_age
+        - name: delivery_person_ratings
+        - name: vehicle_condition
+        - name: type_of_vehicle
 
+    - name: dim_location
+      columns:
+        - name: restaurant_latitude
+          tests:
+            - not_null
+        - name: restaurant_longitude
+          tests:
+            - not_null
+        - name: delivery_latitude
+        - name: delivery_longitude
+        - name: city
+        - name: order_customer_id
+        - name: customer_latitude
+        - name: customer_longitude
+        - name: pin_code
+        - name: customer_id
+
+    - name: dim_time
+      columns:
+        - name: order_date
+          tests:
+            - not_null
+        - name: time_ordered
+        - name: time_order_picked
+        - name: weather_conditions
+        - name: road_traffic_density
+        - name: festival
+
+    - name: fact_order
+      columns:
+        - name: order_id
+          tests:
+            - not_null
+        - name: customer_id
+          tests:
+            - not_null
+        - name: delivery_person_id
+        - name: order_date
+        - name: time_taken
+        - name: multiple_deliveries
+        - name: type_of_order
+        - name: order_amount
