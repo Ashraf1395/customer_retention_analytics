@@ -13,6 +13,6 @@ select
     {{ dbt.safe_cast("Time_taken", api.Column.translate_type("string")) }} as time_taken,
     {{ dbt.safe_cast("multiple_deliveries", api.Column.translate_type("string")) }} as multiple_deliveries,
     {{ dbt.safe_cast("Type_of_order", api.Column.translate_type("string")) }} as type_of_order,
-    {{ dbt.safe_cast("order_amount", api.Column.translate_type("string")) }} as order_amount
+    {{ dbt.safe_cast("order_amount", api.Column.translate_type("integer")) }} as order_amount
 
 from {{ source('staging', 'fact_order') }}
