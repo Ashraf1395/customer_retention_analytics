@@ -5,7 +5,7 @@ The Streaming Pipeline is a dynamic component designed to process continuous str
 ## Architecture
 
 ### Data Flow
-Data is sourced from various producers, including CSV files and offline retail stores. These sources feed data into a Docker container running a streaming service. The streaming service then publishes the data to the Kafka message broker's topic named "supply_chain_data."
+Data is sourced from various producers, including CSV files and offline retail stores. These sources feed data into a Docker container running a streaming service. The streaming service then publishes the data to the Kafka message broker's topic named "customer_activity_data."
 
 ### ![Streaming Pipeline Architecture](../images/Kafka_to_gcs.png)
 

@@ -26,7 +26,7 @@ The Batch Pipeline architecture involves a series of data flows and transformati
 ### Database Design
 The transformed data is structured according to a well-defined database design, ensuring consistency, efficiency, and ease of access for analytical queries.
 
-![olap_database](../images/olap_database_design.png)
+![olap_database](../images/olap_diagram.png)
 
 ## Mage Pipeline
 
