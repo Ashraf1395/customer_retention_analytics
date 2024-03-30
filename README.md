@@ -13,3 +13,6 @@ Try running the following commands:
 - Join the [dbt community](https://getdbt.com/community) to learn from other analytics engineers
 - Find [dbt events](https://events.getdbt.com) near you
 - Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+
+
+Dashboard Public Link: [Dashboard](http://zany-space-xylophone-5g5p74jwr9j37664-3000.app.github.dev/public/dashboard/61097778-602f-4db2-a23d-299c39aba20d)
