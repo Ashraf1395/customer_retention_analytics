@@ -18,15 +18,15 @@ start-mage(){
     docker build -t mage_spark docker/mage
     docker-compose -f docker/mage/docker-compose.yml up -d
 
-    sudo cp batch_pipeline/export_to_bigquery/data_exporters/* docker/mage/${PROJECT_NAME}/data_exporters/
-    sudo cp batch_pipeline/export_to_bigquery/data_loaders/* docker/mage/${PROJECT_NAME}/data_loaders/
+    sudo cp batch_pipeline/export_to_big_query/data_exporters/* docker/mage/${PROJECT_NAME}/data_exporters/
+    sudo cp batch_pipeline/export_to_big_query/data_loaders/* docker/mage/${PROJECT_NAME}/data_loaders/
 
     sudo mkdir docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline
     sudo touch docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline/__init__.py
-    sudo cp batch_pipeline/export_to_bigquery/*.yaml docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline/
+    sudo cp batch_pipeline/export_to_big_query/*.yaml docker/mage/${PROJECT_NAME}/pipelines/batch_pipeline/
 
-    sudo cp streaming_pipeline/kafka_to_gcs_streaming/consumer_from_kafka.yaml docker/mage/${PROJECT_NAME}/data_loaders/
-    sudo cp streaming_pipeline/kafka_to_gcs_streaming/kafka_to_gcs docker/mage/${PROJECT_NAME}/data_exporters/
+    sudo cp streaming_pipeline/kafka_to_gcs_streaming/consume_from_kafka.yaml docker/mage/${PROJECT_NAME}/data_loaders/
+    sudo cp streaming_pipeline/kafka_to_gcs_streaming/kafka_to_gcs.yaml docker/mage/${PROJECT_NAME}/data_exporters/
 
     sudo mkdir docker/mage/${PROJECT_NAME}/pipelines/streaming_pipeline
     sudo touch docker/mage/${PROJECT_NAME}/pipelines/streaming_pipeline/__init__.py
@@ -49,6 +49,22 @@ start-spark(){
     docker-compose -f docker/spark/docker-compose.yml up -d
 }
 
+stop-spark(){
+    docker-compose -f docker/spark/docker-compose.yml down
+}
+
+stop-mage(){
+    docker-compose -f docker/mage/docker-compose.yml down
+}
+
+stop-kafka(){
+    docker-compose -f docker/kafka/docker-compose.yml down
+}
+
+stop-metabase(){
+    docker-compose -f docker/metabase/docker-compose.yml down
+}
+
 #Git stage,commit and push
 gitting(){
     git add .
@@ -69,9 +85,9 @@ terraform-destroy(){
     terraform -chdir=terraform destroy
 }
 gcs-to-bigquery-pipeline(){
-    curl -X POST https://zany-space-xylophone-5g5p74jwr9j37664-6789.app.github.dev/api/pipeline_schedules/1/pipeline_runs/0dac6dcd9ada49f1a1ba6866424aaebe \
-    --header 'Content-Type: application/json' \
-    --data '
+    curl -X POST https://zany-space-xylophone-5g5p74jwr9j37664-6789.app.github.dev/api/pipeline_schedules/2/pipeline_runs/fdea9d4587db4f2880d4fd16f00b38a3 \
+  --header 'Content-Type: application/json' \
+  --data '
     {
     "pipeline_run": {
         "variables": {
@@ -84,4 +100,36 @@ gcs-to-bigquery-pipeline(){
 
 olap-transformation-pipeline(){
     python batch_pipeline/export_to_gcs/pipeline.py
+}
+
+start-batch-pipeline(){
+    start-mage
+    start-spark
+    olap-transformation-pipeline
+
+    gcs-to-bigquery-pipeline
+}
+
+start-streaming-pipeline(){
+    start-kafka
+    start-mage
+    stream-data
+}
+
+start-project(){
+    terraform-start
+    start-streaming-pipeline
+    sleep 120
+    echo "Update your api endpoint from mageui while the data is streaming"
+    start-batch-pipeline
+    sleep 120
+    dbt run
+    echo "Work Complete"
+}
+
+stop-all-services(){
+    stop-kafka
+    stop-mage
+    stop-spark
+    stop-metabase
 }
