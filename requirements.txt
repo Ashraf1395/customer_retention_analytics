@@ -1,3 +1,2 @@
 pyspark
 confluent_kafka
-dbt
