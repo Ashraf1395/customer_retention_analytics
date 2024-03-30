@@ -49,6 +49,14 @@ start-spark(){
     docker-compose -f docker/spark/docker-compose.yml up -d
 }
 
+start-metabase(){
+    docker-compose -f docker/metabase/docker-compose.yml up -d
+}
+
+start-postgres(){
+    docker-compose -f docker/postgres/docker-compose.yml up -d
+}
+
 stop-spark(){
     docker-compose -f docker/spark/docker-compose.yml down
 }
@@ -65,6 +73,10 @@ stop-metabase(){
     docker-compose -f docker/metabase/docker-compose.yml down
 }
 
+stop-postgres(){
+    docker-compose -f docker/postgres/docker-compose.yml down
+}
+
 #Git stage,commit and push
 gitting(){
     git add .
@@ -75,6 +87,16 @@ gitting(){
 
 
 #Terraform actions
+
+terraform-install(){
+    echo $PATH
+    mv ~/Downloads/terraform /usr/local/bin/
+    terraform -help
+    terraform -help plan
+    touch ~/.bashrc
+    terraform -install-autocomplete
+}
+
 terraform-start(){
     terraform -chdir=terraform init
     terraform -chdir=terraform plan
@@ -85,7 +107,7 @@ terraform-destroy(){
     terraform -chdir=terraform destroy
 }
 gcs-to-bigquery-pipeline(){
-    curl -X POST https://zany-space-xylophone-5g5p74jwr9j37664-6789.app.github.dev/api/pipeline_schedules/2/pipeline_runs/fdea9d4587db4f2880d4fd16f00b38a3 \
+    curl -X POST https://zany-space-xylophone-5g5p74jwr9j37664-6789.app.github.dev/api/pipeline_schedules/1/pipeline_runs/0dac6dcd9ada49f1a1ba6866424aaebe \
   --header 'Content-Type: application/json' \
   --data '
     {

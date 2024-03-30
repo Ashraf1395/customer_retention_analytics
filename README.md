@@ -128,7 +128,7 @@ This tech stack offers a robust foundation for building and deploying data proce
 I have created commands to run different parts of the project which makes running this project
 very easy. For any queries or debugging help check the Debug [Readme](./debug.md).
 
-Link the Tutorial Video: https://www.loom.com/share/c358150b5f864deb80e47900451b6d9c?sid=52014c06-6834-4f2a-a716-9dbf59b634c1
+Link the Tutorial Video: [Tutorial Video](https://www.loom.com/share/0165347d421c4b78bbe7e16482926017?sid=b36ad434-2f6f-4934-abe4-42110ef4c2e7)
 
 Follow these steps to execute the project seamlessly but before that whenever you start a new terminal
 run this command `source commands.sh` to create all the functions and environment variables.:
