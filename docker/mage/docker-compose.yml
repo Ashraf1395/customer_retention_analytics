@@ -5,7 +5,7 @@ networks:
     external: true
 services:
   mage:
-    image: mage_spark
+    image: mageai/mageai:latest
     container_name: ${PROJECT_NAME}-mage
     command: mage start ${PROJECT_NAME}
     env_file:
