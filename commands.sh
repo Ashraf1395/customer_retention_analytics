@@ -87,6 +87,16 @@ gitting(){
 
 
 #Terraform actions
+
+terraform-install(){
+    echo $PATH
+    mv ~/Downloads/terraform /usr/local/bin/
+    terraform -help
+    terraform -help plan
+    touch ~/.bashrc
+    terraform -install-autocomplete
+}
+
 terraform-start(){
     terraform -chdir=terraform init
     terraform -chdir=terraform plan
